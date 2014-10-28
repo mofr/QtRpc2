@@ -211,6 +211,15 @@ void ProxyBase::init(QStringList functionlist, QStringList callbacklist, QString
 		QString type = method.typeName();
 		Signature sig(method.methodSignature());
 
+		//deal with new qt5 moc system
+		for(int argIndex = 0; argIndex < sig.numArgs(); ++argIndex)
+		{
+			if(method.parameterNames()[argIndex].startsWith("qint32"))
+			{
+				sig.setArg(argIndex, "qint32");
+			}
+		}
+
 		// This checks to see if it's a cloned signal, and continues if it is...
 		// Undocumented private API ftl!!!
 		if (method.attributes() & 2)
