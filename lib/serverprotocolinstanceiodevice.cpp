@@ -58,6 +58,7 @@ ServerProtocolInstanceIODevice::ServerProtocolInstanceIODevice(Server* serv, QOb
 	qxt_d().totalSize = 0;
 	qxt_d().device = 0;
 	qxt_d().state = Connecting;
+	qxt_d().stream.setVersion(QDataStream::Qt_4_7);
 }
 
 /**
@@ -153,6 +154,7 @@ void ServerProtocolInstanceIODevicePrivate::readyRead()
 			msg.setVersion(version);
 			{
 				QDataStream stream(buffer);
+				stream.setVersion(QDataStream::Qt_4_7);
 				stream >> msg;
 			}
 #ifdef DEBUG_MESSAGES
@@ -164,6 +166,7 @@ void ServerProtocolInstanceIODevicePrivate::readyRead()
 				msg = Message();
 				{
 					QDataStream stream(buffer);
+					stream.setVersion(QDataStream::Qt_4_7);
 					stream >> msg;
 				}
 #ifdef DEBUG_MESSAGES

@@ -292,6 +292,7 @@ qint64 Message::size() const
 	QReadLocker lock(qxt_d().constMutex());
 	QByteArray ba;
 	QDataStream in(&ba, QIODevice::ReadWrite);
+	in.setVersion(QDataStream::Qt_4_7);
 	in << *this;
 	return ba.size();
 }

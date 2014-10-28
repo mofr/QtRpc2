@@ -174,6 +174,7 @@ public:
 		{
 			_ret = ret;
 		}
+		~ReturnValueException() throw(){}
 
 		virtual const char* what() const throw()
 		{
@@ -185,6 +186,13 @@ public:
 		QByteArray _exceptionText;
 	};
 
+	class ExceptionThrower
+	{
+	public:
+		virtual void throwException(const ReturnValue &ret) = 0;
+	};
+
+
 	template <class T>
 	class ExceptionThrowerTemplated : public ExceptionThrower
 	{
@@ -192,12 +200,6 @@ public:
 		{
 			throw T(ret);
 		}
-	};
-
-	class ExceptionThrower
-	{
-	public:
-		virtual void throwException(const ReturnValue &ret) = 0;
 	};
 
 	enum State

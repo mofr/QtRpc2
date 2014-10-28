@@ -52,6 +52,7 @@ ClientProtocolIODevice::ClientProtocolIODevice(QObject* parent)
 	QXT_INIT_PRIVATE(ClientProtocolIODevice);
 	QObject::connect(this, SIGNAL(aboutToChangeThreads(QThread*)), &qxt_d(), SLOT(moveToThread(QThread*)));
 	qxt_d().totalSize = 0;
+	qxt_d().stream.setVersion(QDataStream::Qt_4_7);
 }
 
 /**
@@ -211,6 +212,7 @@ void ClientProtocolIODevicePrivate::writeMessage(Message msg)
 	}
 	QByteArray array;
 	QDataStream stream(&array, QIODevice::WriteOnly);
+	stream.setVersion(QDataStream::Qt_4_7);
 	msg.setVersion(qxt_p().version());
 
 #ifdef DEBUG_MESSAGES
@@ -288,6 +290,7 @@ void ClientProtocolIODevicePrivate::readyRead()
 			Message msg;
 			msg.setVersion(qxt_p().version());
 			QDataStream stream(buffer);
+			stream.setVersion(QDataStream::Qt_4_7);
 			stream >> msg;
 #ifdef DEBUG_MESSAGES
 			qDebug() << "R:" << msg.signature();
