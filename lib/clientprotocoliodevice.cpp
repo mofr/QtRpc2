@@ -217,9 +217,9 @@ void ClientProtocolIODevicePrivate::writeMessage(Message msg)
 
 #ifdef DEBUG_MESSAGES
 	if (msg.type() == Message::Return)
-		qDebug() << "S:" << msg.returnValue();
+		qDebug() << "S:" << msg.id() << msg.returnValue();
 	else
-		qDebug() << "S:" << msg.signature();
+		qDebug() << "S:" << msg.id() << msg.signature();
 #endif
 
 	stream << msg.size() << msg;
@@ -293,7 +293,14 @@ void ClientProtocolIODevicePrivate::readyRead()
 			stream.setVersion(QDataStream::Qt_4_7);
 			stream >> msg;
 #ifdef DEBUG_MESSAGES
-			qDebug() << "R:" << msg.signature();
+			if(msg.type() == Message::Return)
+			{
+				qDebug() << "R:" << msg.id() << msg.returnValue();
+			}
+			else
+			{
+				qDebug() << "R:" << msg.signature();
+			}
 #endif
 			parseMessage(msg);
 		}
