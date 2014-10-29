@@ -902,7 +902,7 @@ void QtRpc::ClientProxyPrivate::receiveEvent(Signature sig, Arguments args)
 	ReturnValue ret = qxt_p().emitSignal(sig, args);
 	if (ret.isError())
 	{
-		qFatal(qPrintable(ret.errString()));
+		qWarning() << "[QtRpc::ClientProxyPrivate::receiveEvent]" << qPrintable(ret.errString());
 	}
 }
 
