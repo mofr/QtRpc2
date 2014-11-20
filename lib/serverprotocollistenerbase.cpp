@@ -76,6 +76,7 @@ Server* ServerProtocolListenerBase::server() const
 void ServerProtocolListenerBase::prepareInstance(ServerProtocolInstanceBase* instance, QThread* thread)
 {
 #ifndef Q_OS_WIN32
+#ifndef Q_OS_ANDROID
 	if (qxt_d().serv->threadType() == Server::ProcessPerInstance)
 	{
 		QMetaObject::invokeMethod(instance, "deleteLater", Qt::QueuedConnection);
@@ -121,6 +122,7 @@ void ServerProtocolListenerBase::prepareInstance(ServerProtocolInstanceBase* ins
 		return;
 	}
 #endif
+#endif
 
 	if (thread == 0)
 		thread = qxt_d().serv->requestThread();
@@ -147,9 +149,11 @@ void ServerProtocolListenerBase::prepareInstance(ServerProtocolInstanceBase* ins
 			QObject::connect(instance, SIGNAL(destroyed()), thread, SLOT(quit()));
 			break;
 #ifndef Q_OS_WIN32
+#ifndef Q_OS_ANDROID
 		case Server::ProcessPerInstance:
 			qCritical() << "fixme: Threading model is ProcessPerInstance but it still made it to the case statement in prepareInstance, this should never happen.";
 			break;
+#endif
 #endif
 	}
 	QMetaObject::invokeMethod(instance, "init", Qt::QueuedConnection);
